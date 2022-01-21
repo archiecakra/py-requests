@@ -1,5 +1,3 @@
-from cgitb import text
-from lib2to3.pgen2 import token
 import logging
 import requests
 import json
@@ -14,19 +12,19 @@ site = {
   'esurat.surabaya.go.id': '<h4>Log In eSurat</h4>',
   'sswalfa.surabaya.go.id': '<h2 class="text-white text-center font-weight-bold">Ajukan Permohonan Izin Melalui SSW</h2>',
 }
-response = {}
 
 def lambda_handler(event=None, context=None):
+
+  response = ''
   
   for key in site:
     req = requests.get(f'https://{key}')
     if site[key] in req.text:
-      response[key] = f'{req.status_code} String Found in {key}'
+      response += f'{req.status_code} String Found in {key}\n'
     else:
-      response[key] = f'{req.status_code} Not Found in {key}'
+      response += f'{req.status_code} Not Found in {key}\n'
 
   bot.send_message(text=response , chat_id=-764108168)
-
-  return response
+  print(response)
 
 lambda_handler()
